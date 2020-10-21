@@ -88,7 +88,7 @@
                 };
                 RedirectUrlPipelineArgs redirectUrlPipelineArgs = new RedirectUrlPipelineArgs(
                     new EventData(ExmContext.ContactIdentifier, emailEvent), ExmContext.QueryString, _originalLink,
-                    !excludeRobotsArgs.IsInExcludeList);
+                    Sitecore.Analytics.Tracker.IsActive);
                 _pipelineHelper.RunPipeline("redirectUrl", redirectUrlPipelineArgs, "exm.messageEvents");
                 string value;
                 if (redirectUrlPipelineArgs.RedirectToUrl == null)
@@ -151,7 +151,7 @@
 
         protected override void Failed()
         {
-            Tracker.Current.CurrentPage.Cancel();
+            Tracker.Current?.CurrentPage?.Cancel();
             base.Response.Status = "301 Moved Permanently";
             base.Response.AddHeader("Location", _originalLink ?? Settings.ItemNotFoundUrl);
         }
